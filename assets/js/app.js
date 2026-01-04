@@ -18,7 +18,7 @@ const productsData = [
       "Mirror-polished finish with softened edges"
     ],
     "media": {
-      "image": "images/product-2-image.png",
+      "image": "images/product-2-image.webp",
       "video": "images/product-2-video.mp4"
     }
   },
@@ -36,7 +36,7 @@ const productsData = [
       "Interior compartment visible through door aperture"
     ],
     "media": {
-      "image": "images/product-3-image.png",
+      "image": "images/product-3-image.webp",
       "video": "images/product-3-video.mp4"
     }
   },
@@ -54,7 +54,7 @@ const productsData = [
       "Removable pull-out crumb tray integrated at base"
     ],
     "media": {
-      "image": "images/product-4-image.png",
+      "image": "images/product-4-image.webp",
       "video": "images/product-4-video.mp4"
     }
   },
@@ -72,7 +72,7 @@ const productsData = [
       "Two symmetric loop handles fixed at the rim"
     ],
     "media": {
-      "image": "images/product-5-image.png",
+      "image": "images/product-5-image.webp",
       "video": "images/product-5-video.mp4"
     }
   },
@@ -90,7 +90,7 @@ const productsData = [
       "Standard thickness profile with eased perimeter edge"
     ],
     "media": {
-      "image": "images/product-6-image.png",
+      "image": "images/product-6-image.webp",
       "video": "images/product-6-video.mp4"
     }
   },
@@ -108,7 +108,7 @@ const productsData = [
       "Standard rectangular footprint with open base"
     ],
     "media": {
-      "image": "images/product-7-image.png",
+      "image": "images/product-7-image.webp",
       "video": "images/product-7-video.mp4"
     }
   },
@@ -126,7 +126,7 @@ const productsData = [
       "Four short rubber feet for grip and clearance"
     ],
     "media": {
-      "image": "images/product-8-image.png",
+      "image": "images/product-8-image.webp",
       "video": "images/product-8-video.mp4"
     }
   },
@@ -144,7 +144,7 @@ const productsData = [
       "Round, flat base aligned to the stem axis"
     ],
     "media": {
-      "image": "images/product-9-image.png",
+      "image": "images/product-9-image.webp",
       "video": "images/product-9-video.mp4"
     }
   },
@@ -162,7 +162,7 @@ const productsData = [
       "Conventional straight handle profile"
     ],
     "media": {
-      "image": "images/product-10-image.png",
+      "image": "images/product-10-image.webp",
       "video": "images/product-10-video.mp4"
     }
   },
@@ -180,7 +180,7 @@ const productsData = [
       "Solid wood body with concealed handle cavities"
     ],
     "media": {
-      "image": "images/product-11-image.png",
+      "image": "images/product-11-image.webp",
       "video": "images/product-11-video.mp4"
     }
   },
@@ -198,7 +198,7 @@ const productsData = [
       "Self-supporting solid wax construction"
     ],
     "media": {
-      "image": "images/product-12-image.png",
+      "image": "images/product-12-image.webp",
       "video": "images/product-12-video.mp4"
     }
   },
@@ -216,7 +216,7 @@ const productsData = [
       "Lever pivots to a closed, compact profile"
     ],
     "media": {
-      "image": "images/product-13-image.png",
+      "image": "images/product-13-image.webp",
       "video": "images/product-13-video.mp4"
     }
   },
@@ -234,7 +234,7 @@ const productsData = [
       "Pestle sized to match standard set proportions"
     ],
     "media": {
-      "image": "images/product-14-image.png",
+      "image": "images/product-14-image.webp",
       "video": "images/product-14-video.mp4"
     }
   },
@@ -252,7 +252,7 @@ const productsData = [
       "Standard peeler handle and head geometry for controlled hand positioning"
     ],
     "media": {
-      "image": "images/product-15-image.png",
+      "image": "images/product-15-image.webp",
       "video": "images/product-15-video.mp4"
     }
   }
@@ -284,11 +284,16 @@ function initAOS() {
 
 // Create product card HTML
 function createProductCard(product) {
+  // Determine the correct path based on current location
+  const isInPages = window.location.pathname.includes('/pages/');
+  const productDetailPath = isInPages ? 'product-detail.html' : 'pages/product-detail.html';
+  const imagePath = isInPages ? `../${product.media.image}` : product.media.image;
+
   // Always use image for product cards (no videos on listing pages)
-  const mediaHTML = `<img src="${product.media.image}" alt="${product.title}" loading="lazy">`;
+  const mediaHTML = `<img src="${imagePath}" alt="${product.title}" loading="lazy">`;
 
   return `
-    <a href="product-detail.html?id=${product.row_number}" class="product-card" data-category="${product.category || 'all'}">
+    <a href="${productDetailPath}?id=${product.row_number}" class="product-card" data-category="${product.category || 'all'}">
       <div class="product-card-image">
         <span class="product-card-tag">${product.tag}</span>
         ${mediaHTML}
@@ -410,8 +415,59 @@ function initProductDetailPage() {
     return;
   }
 
-  // Update page title
+  // Update page title and SEO meta tags
   document.title = `${product.title} | Serra Vano Milano`;
+  document.getElementById('page-title').textContent = `${product.title} | Serra Vano Milano`;
+
+  const productUrl = `https://serravano.com/product-detail.html?id=${productId}`;
+  const productImageUrl = `https://serravano.com/${product.media.image}`;
+
+  // Update meta description
+  const metaDesc = document.getElementById('meta-description');
+  if (metaDesc) metaDesc.setAttribute('content', `${product.title} - ${product.description.substring(0, 150)}...`);
+
+  // Update canonical link
+  const canonicalLink = document.getElementById('canonical-link');
+  if (canonicalLink) canonicalLink.setAttribute('href', productUrl);
+
+  // Update Open Graph tags
+  document.getElementById('og-url')?.setAttribute('content', productUrl);
+  document.getElementById('og-title')?.setAttribute('content', `${product.title} | Serra Vano Milano`);
+  document.getElementById('og-description')?.setAttribute('content', product.description.substring(0, 200));
+  document.getElementById('og-image')?.setAttribute('content', productImageUrl);
+
+  // Update Twitter tags
+  document.getElementById('twitter-url')?.setAttribute('content', productUrl);
+  document.getElementById('twitter-title')?.setAttribute('content', `${product.title} | Serra Vano Milano`);
+  document.getElementById('twitter-description')?.setAttribute('content', product.description.substring(0, 200));
+  document.getElementById('twitter-image')?.setAttribute('content', productImageUrl);
+
+  // Add structured data for product
+  const structuredData = {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    "name": product.title,
+    "description": product.description,
+    "image": productImageUrl,
+    "brand": {
+      "@type": "Brand",
+      "name": "Serra Vano Milano"
+    },
+    "offers": {
+      "@type": "Offer",
+      "price": product.price.replace('$', '').replace(',', ''),
+      "priceCurrency": "USD",
+      "availability": "https://schema.org/InStock",
+      "url": productUrl
+    },
+    "category": product.category
+  };
+
+  // Insert structured data script
+  const script = document.createElement('script');
+  script.type = 'application/ld+json';
+  script.textContent = JSON.stringify(structuredData);
+  document.head.appendChild(script);
 
   // Populate product details
   document.getElementById('productTag').textContent = product.tag;
@@ -427,38 +483,42 @@ function initProductDetailPage() {
   const mediaMain = document.getElementById('mediaMain');
   const mediaThumbnails = document.getElementById('mediaThumbnails');
 
+  // Determine correct path for images (product-detail is in pages folder)
+  const imagePath = `../${product.media.image}`;
+  const videoPath = product.media.video ? `../${product.media.video}` : null;
+
   // Add image
   const imgThumb = document.createElement('div');
   imgThumb.className = 'media-thumb active';
-  imgThumb.innerHTML = `<img src="${product.media.image}" alt="${product.title}">`;
+  imgThumb.innerHTML = `<img src="${imagePath}" alt="${product.title}">`;
   imgThumb.addEventListener('click', () => {
-    setMainMedia('image', product.media.image, product.title);
+    setMainMedia('image', imagePath, product.title);
     setActiveThumb(imgThumb);
   });
   mediaThumbnails.appendChild(imgThumb);
 
   // Add video/GIF if exists
-  if (product.media.video) {
+  if (videoPath) {
     const vidThumb = document.createElement('div');
     vidThumb.className = 'media-thumb';
 
     // Check if it's a GIF or video
-    const isGif = product.media.video.endsWith('.gif');
+    const isGif = videoPath.endsWith('.gif');
     if (isGif) {
-      vidThumb.innerHTML = `<img src="${product.media.video}" alt="${product.title}">`;
+      vidThumb.innerHTML = `<img src="${videoPath}" alt="${product.title}">`;
     } else {
-      vidThumb.innerHTML = `<video muted loop><source src="${product.media.video}" type="video/mp4"></video>`;
+      vidThumb.innerHTML = `<video muted loop><source src="${videoPath}" type="video/mp4"></video>`;
     }
 
     vidThumb.addEventListener('click', () => {
-      setMainMedia(product.media.video, product.title);
+      setMainMedia(videoPath, product.title);
       setActiveThumb(vidThumb);
     });
     mediaThumbnails.appendChild(vidThumb);
   }
 
   // Set initial main media
-  setMainMedia(product.media.image, product.title);
+  setMainMedia(imagePath, product.title);
 
   function setMainMedia(src, alt) {
     // Auto-detect if it's a video or image/GIF based on extension

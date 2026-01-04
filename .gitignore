@@ -1,0 +1,40 @@
+# Dependencies (development only)
+node_modules/
+package.json
+package-lock.json
+
+# Scripts (development/build tools only)
+scripts/
+
+# Documentation (not needed for site to function)
+docs/
+
+# IDE/Editor specific files
+.claude/
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Environment variables
+.env
+.env.local
+.env.development
+.env.production
+
+# Temporary files
+*.tmp
+*.temp
+.cache/

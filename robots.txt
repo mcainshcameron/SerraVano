@@ -1,0 +1,9 @@
+User-agent: *
+Allow: /
+
+# Disallow optimization scripts
+Disallow: /optimize-images.js
+Disallow: /node_modules/
+
+# Sitemap
+Sitemap: https://serravano.com/sitemap.xml
